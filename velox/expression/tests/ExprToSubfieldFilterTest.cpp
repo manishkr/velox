@@ -304,6 +304,17 @@ TEST_F(ExprToSubfieldFilterTest, dereferenceWithEmptyField) {
   ASSERT_FALSE(filter);
 }
 
+TEST_F(ExprToSubfieldFilterTest, toInt64ListInt32) {
+  VectorMaker maker{pool_.get()};
+
+  auto vector = maker.flatVector<int32_t>({10, std::nullopt, 20, 30});
+
+  auto values = toInt64List<int32_t>(vector, 0, 4);
+
+  std::vector<int64_t> expected{10, 20, 30};
+  EXPECT_EQ(values, expected);
+}
+
 class CustomExprToSubfieldFilterParser : public ExprToSubfieldFilterParser {
  public:
   std::pair<common::Subfield, std::unique_ptr<common::Filter>> toSubfieldFilter(

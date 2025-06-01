@@ -70,7 +70,10 @@ toInt64List(const VectorPtr& vector, vector_size_t start, vector_size_t size) {
   auto ints = vector->as<SimpleVector<T>>();
   std::vector<int64_t> values;
   for (auto i = 0; i < size; i++) {
-    values.push_back(ints->valueAt(start + i));
+    auto idx = start + i;
+    if (!ints->isNullAt(idx)) {
+      values.push_back(ints->valueAt(idx));
+    }
   }
   return values;
 }
